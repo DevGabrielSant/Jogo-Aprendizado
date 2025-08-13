@@ -3,255 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Drag and Drop Ciclo da Água</title>
+<link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/6810e8cd1c64e82623876ba8/6811022220b8fb623490040c_logo.svg"">
+<title>Arco Educação - Ciclo da Água</title>
+<link rel="stylesheet" href="style.css">
+</head>
 <body>
 <style>
-  .container {
-    width: 80%;
-    min-height: 150px;
-    padding: 10px;
-    margin: 10px;
-    border: 2px solid #333;
-    background: #f8f8f8;
-    display: inline-block;
-    vertical-align: top;
-    border-radius: 15px;
-  }
-  .valores {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-around;
-    align-items: center;
-    background-color: rgb(211, 139, 139);
-    height: 100px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-  }
-  .campo {
-    padding: 10px;
-    margin: 5px 0;
-    background: lightblue;
-    border: 1px solid #333;
-    cursor: grab;
-    user-select: none;
-    border-radius: 10px;
-
-  }
-  .campo.arrastando {
-    opacity: 0.5;
-    
-  }
-  .respostas {
-    display: flex;
-    flex-direction:column;
-    justify-content: center;
-    background-color: rgb(201, 43, 43);
-    height: 75%;
-    width: 70%;
-    border: 1px dashed #000;
-    border-radius: 10px;
-
-  }
-
-  /* Alto contraste */
-.high-contrast {
-  background-color: black;
-  color: white;
-}
-
-.high-contrast .valores {
-  background-color: black !important;
-  color: yellow !important;
-}
-
-.high-contrast .campo {
-  background-color: yellow !important;
-  color: black !important;
-}
-
-#painel {
-  margin-bottom: 10px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.jogo{
-  /* visibility: hidden; */
-  background-color: rgb(145, 138, 138);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 80%;
-  margin: auto;
-  border-radius: 15px;
-}
-
-
 
 </style>
-<div class="jogo" id="jogo">
-  <div id="painel">
-    <label>
-      <input type="checkbox" id="toggle-contraste"> Alto Contraste
-    </label>
-    | Tempo: <span id="tempo">0</span>s
-    | Pontos: <span id="placar">0</span>
+<div data-wf--header--variant="base" data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar header-sticky w-nav">
+  <div class="container-wrapper w-container">
+    <div class="navmain">
+      <div class="left-content-header">
+        <a href="https://www.arcoeducacao.com.br/" aria-current="page" class="logo-arco w-inline-block w--current">
+        <img loading="lazy" src="https://cdn.prod.website-files.com/6810e8cd1c64e82623876ba8/6811022220b8fb623490040c_logo.svg" alt="Logo Arco Educação" class=""></a>
+        <div class="divisor-header bg-gray-300"></div>
+        <nav role="navigation" class="nav overlay w-nav-menu">
+          <a data-w-id="5a4fa82c-11b6-934c-ade2-584d8c6678a7" href="https://www.arcoeducacao.com.br/quem-somos" class="link-nav w-inline-block">
+            <div>Quem somos</div>
+          </a>
+          <a data-w-id="5a4fa82c-11b6-934c-ade2-584d8c6678b3" href="https://www.arcoeducacao.com.br/projetos-de-impacto" class="link-nav w-inline-block">
+            <div>Projetos</div>
+          </a>
+            <a data-w-id="5a4fa82c-11b6-934c-ade2-584d8c6678af" href="https://www.arcoeducacao.com.br/carreiras" class="link-nav w-inline-block">
+              <div>Carreiras</div>
+          </a>
+          <a data-w-id="2a0dd8af-e895-afb3-e6cb-628f5670d3de" href="https://www.arcoeducacao.com.br/arco-instituto" class="link-nav w-inline-block">
+                <div>Arco Instituto</div>
+          </a>
+        </nav>        
+        </div>
+      </div>
+    </div>
+    <div><input type="checkbox" id="toggle-contraste"> Alto Contraste</div>
+    
+</div>
+
+<container>
+  <div class="content" id="content " >
+    <h1 class="title">O ciclo da àgua</h1>
+    <a>O ciclo da água é o movimento contínuo da água no planeta, fundamental para manter a vida.
+       Ele começa com a evaporação, quando o calor do sol faz a água de rios, lagos e oceanos transformar-se em vapor e subir para a atmosfera.
+        Lá, o vapor se resfria e passa pela condensação, formando nuvens.
+         Quando essas nuvens ficam carregadas, ocorre a precipitação, devolvendo a água à superfície na forma de chuva, neve ou granizo.
+          Parte dessa água penetra no solo, processo chamado de infiltração, abastecendo lençóis freáticos e aquíferos.
+           Assim, o ciclo recomeça, garantindo a circulação e renovação da água na Terra.
+    </a>
+
+    <h3 class="title">Vamos testar seus conhecimentos?</h3>
+    <p>Abaixo estruturamos um mini-game, onde você deve arrastar cada descrição ao seu devido titulo.</p>
+    <br>
+    <h3 class="title">Boa sorte!</h3>
   </div>
 
-  <div id="container1" class="container"></div>
+  <button class="btn" id="btn" >
+    <a>Iniciar Jogo</a>
+  </button>
+</container>
 
-  <div id="container2" class="container"></div>
+<div class="jogo" id="jogo" hidden>
+
+  <div id="painel">
+    <label>
+    </label>
+    | Tempo: <span id="tempo">0s⏱️</span>
+    | Pontos: <span id="placar">0💰</span>
+  </div>
+  
+  <div id="container1" class="container"><h2 class="title">DESCRIÇÃO</h2></div>
+  
+  <div id="container2" class="container"><h2 class="title">TITULO</h2></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script src="script.js"></script>
 <script>
-let arrastando = null;
-let pontuacao = 0;
-let acertos = 0;
-let total = 0;
-let tempo = 0;
-let timerInterval = null;
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('btn');
+    const jogo = document.getElementById('jogo');
+    const content = document.querySelector('.content')
 
-
-// Som
-const somAcerto = new Audio('assets/songs/happy-message-ping-351298.mp3');
-const somErro = new Audio('assets/songs/error-126627.mp3');
-
-// Elementos
-const tempoDisplay = document.getElementById('tempo');
-const placarDisplay = document.getElementById('placar');
-const toggleContraste = document.getElementById('toggle-contraste');
-
-// Alto contraste
-if (toggleContraste) {
-  toggleContraste.addEventListener('change', () => {
-    document.body.classList.toggle('high-contrast', toggleContraste.checked);
-  });
-}
-
-// Temporizador
-function iniciarTimer() {
-  if (!timerInterval) {
-    timerInterval = setInterval(() => {
-      tempo++;
-      tempoDisplay.textContent = tempo;
-    }, 1000);
-  }
-}
-
-function pararTimer() {
-  clearInterval(timerInterval);
-  timerInterval = null;
-}
-
-// Carrega o JSON externo
-fetch('jogo.json')
-  .then(r => r.json())
-  .then(dados => {
-    total = dados.etapas.length;
-
-    // Adiciona as descrições como itens arrastáveis
-    const container1 = document.getElementById('container1');
-    dados.etapas.forEach((etapa, i) => {
-      const div = document.createElement('div');
-      div.className = 'campo';
-      div.draggable = true;
-      div.dataset.id = i;
-      div.textContent = etapa.descricao;
-      container1.appendChild(div);
-    });
-
-    // Cria as áreas de respostas com nomes
-    const container2 = document.getElementById('container2');
-    dados.etapas.forEach((etapa, i) => {
-      const bloco = document.createElement('div');
-      bloco.className = 'valores';
-
-      const dropArea = document.createElement('div');
-      dropArea.className = 'respostas';
-      dropArea.dataset.id = i;
-
-      const nome = document.createElement('div');
-      nome.textContent = etapa.nome;
-
-      bloco.appendChild(dropArea);
-      bloco.appendChild(nome);
-      container2.appendChild(bloco);
-    });
-
-    inicializarEventos();
-  });
-
-function inicializarEventos() {
-  const campos = document.querySelectorAll('.campo');
-  campos.forEach(campo => {
-    campo.addEventListener('dragstart', () => {
-      arrastando = campo;
-      campo.classList.add('arrastando');
-    });
-    campo.addEventListener('dragend', () => {
-      arrastando = null;
-      campo.classList.remove('arrastando');
-    });
-  });
-
-  const respostas = document.querySelectorAll('.respostas');
-  respostas.forEach(area => {
-    area.addEventListener('dragover', e => e.preventDefault());
-
-    area.addEventListener('drop', () => {
-      iniciarTimer();
-
-      if (arrastando && arrastando.dataset.id === area.dataset.id) {
-        area.appendChild(arrastando);
-        arrastando.draggable = false;
-        area.parentElement.style.background = 'lightgreen';
-        area.style.background='none';
-        area.style.border='none';
-
-        somAcerto.currentTime = 0;
-        somAcerto.play();
-
-        pontuacao++;
-        acertos++;
-        atualizarPlacar();
-
-        if (acertos === total) {
-          pararTimer();
-          setTimeout(() => {}, 300);
-          Swal.fire({
-          icon: 'success',
-          title: 'Acertou!',
-          html: `Parabéns! Você escolheu corretamente!<br><br>Pontuação final: ${pontuacao}/${total}\n Tempo: ${tempo}s`,
-          confirmButtonColor: '#28a745',
-          timer: 15000,
-          confirmButtonText: 'Voltar a página principal',
-          confirmButtonColor: '#d33',
-});
+    btn.addEventListener('click', () => {
+        if (content.style.display !== 'none') {
+            // Mostra jogo, esconde conteúdo
+            content.style.display = 'none';
+            jogo.hidden = false;
+            btn.textContent = "Voltar";
+        } else {
+            // Volta para o conteúdo inicial
+            content.style.display = 'block';
+            jogo.hidden = true;
+            btn.textContent = "Iniciar Jogo";
         }
-      } else {
-
-        const nomeEvento=area.nextElementSibling.textContent;
-        area.style.background = 'lightcoral';
-        somErro.currentTime = 0;
-        somErro.play();
-        setTimeout(() => area.style.background = '', 500);
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Ops...',
-          text: `Essa descrição não corresponde ao evento de ${nomeEvento}, vamos tentar novamente?`,
-          confirmButtonText: 'Tentar novamente',
-          confirmButtonColor: '#d33',
-        });
-      }
     });
   });
-}
-
-function atualizarPlacar() {
-  placarDisplay.textContent = pontuacao;
-}
-
 </script>
 </body>
