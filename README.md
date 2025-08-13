@@ -5,11 +5,17 @@ Este é um jogo educativo de arrastar e soltar que permite ao usuário associar 
 O jogo conta com:
 
 -Arrastar e soltar (drag & drop) para vincular descrições a nomes corretos.
+
 -Pontuação em tempo real.
+
 -Temporizador para medir o tempo de conclusão.
+
 -Sons para acerto e erro.
+
 -Popups interativos com feedback usando SweetAlert2.
+
 -Confetes de comemoração ao concluir corretamente todas as etapas.
+
 -Modo Alto Contraste para acessibilidade.
 
 
@@ -29,7 +35,9 @@ projeto-jogo/
 
       
 ⚙️ Como o jogo funciona
+
 1. Carregamento de Dados
+   
 O jogo lê um arquivo JSON externo (jogo.json) que contém todas as etapas do capítulo: nomes e descrições.
 
 Exemplo de JSON:
@@ -60,36 +68,51 @@ também é possível incluir mais linhas no JSON para que o projeto seja escalav
 
 
 2. Criação dos Elementos do Jogo
+   
 Container 1: recebe as descrições que podem ser arrastadas.
+
 Container 2: recebe os nomes dos eventos e suas respectivas áreas de drop.
 
-3. Drag & Drop
+
+4. Drag & Drop
 O jogador arrasta a descrição até o nome correto.
 
 Se estiver correto:
+
 -A descrição é fixada.
+
 -O bloco muda de cor para verde.
+
 -Toca som de acerto.
+
 -Atualiza a pontuação.
+
 
 Se estiver errado:
 
 -O bloco fica vermelho temporariamente.
+
 -Toca som de erro.
+
 -Exibe um popup informando o nome correto.
 
+
 4. Timer e Placar
+
 O temporizador inicia no primeiro movimento e conta os segundos.
 
 O placar atualiza a cada acerto, exibindo a pontuação em tempo real.
 
 5. Feedback e Finalização
+   
 Ao finalizar todas as etapas corretamente:
 
 -Aparece um popup de sucesso com pontuação e tempo.
+
 -Disparam confetes para comemorar.
 
 6. Alto Contraste
+   
 -Um checkbox permite ativar o modo alto contraste, alterando as cores da interface para melhor visibilidade.
 
 🛠️ Tecnologias Utilizadas
@@ -108,27 +131,36 @@ JSON: Arquivo externo de dados para fácil escalabilidade.
 
 
 Como Executar:
+
 Clone o repositório:
+
 git clone https://github.com/seu-usuario/projeto-jogo.git
 
 -Abra index.html no navegador.
+
 -Clique no botão Iniciar Jogo.
+
 -Arraste as descrições para os nomes corretos e divirta-se!
 
 
 Como Escalar para outros capítulos:
 
 -Crie um novo arquivo JSON com o mesmo formato (capituloX.json).
+
 -Atualize o urlJson no script.js para apontar para o novo arquivo.
+
 -O mesmo código funciona para qualquer disciplina ou capítulo, sem alterações adicionais.
 
 
 Possíveis Melhorias Futuras
 
 -Criar níveis ou capítulos sequenciais.
+
 -Salvar pontuação em localStorage ou banco de dados.
+
 -Incluir temporizador regressivo com limite de tempo.
 
 
 📸 Screenshot
 <img width="533" height="940" alt="image" src="https://github.com/user-attachments/assets/6ff2249f-01df-4001-8204-30b8cbf3d48e" />
+
