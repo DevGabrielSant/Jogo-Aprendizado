@@ -52,16 +52,24 @@ Exemplo de JSON:
 }
 
 também é possível incluir mais linhas no JSON para que o projeto seja escalavel. Segue exemplo abaixo:
+
 {
 "titulo": "Capítulo 3 - O Ciclo da Água",
 "etapas": [
-{"nome": "Evaporação",
-"descricao": "A água presente na superfície dos rios, lagos e oceanos se aquece com a luz do sol e se transforma em vapor, subindo para a atmosfera."},
+{"nome": "Evaporação"
+,
+"descricao": "A água presente na superfície dos rios, lagos e oceanos se aquece com a luz do sol e se transforma em vapor, subindo para a atmosfera."}
+,
 {"nome": "Condensação",
-"descricao": "O vapor de água sobe e, ao encontrar camadas frias da atmosfera, se resfria, formando as nuvens."},
+"descricao": "O vapor de água sobe e, ao encontrar camadas frias da atmosfera, se resfria, formando as nuvens."}
+,
 {"nome": "Precipitação",
-"descricao": "Quando as nuvens estão carregadas de vapor, a água retorna à superfície da Terra em forma de chuva, neve ou granizo."},{"nome": "Infiltração",
-"descricao": "Parte da água da precipitação penetra no solo, abastecendo os lençóis freáticos e alimentando nascentes e aquíferos."},{"nome": "Solidificação",
+"descricao": "Quando as nuvens estão carregadas de vapor, a água retorna à superfície da Terra em forma de chuva, neve ou granizo."}
+,
+{"nome": "Infiltração",
+"descricao": "Parte da água da precipitação penetra no solo, abastecendo os lençóis freáticos e alimentando nascentes e aquíferos."}
+,
+{"nome": "Solidificação",
 "descricao": "É a mudança física do estado líquido para o estado sólido."}
 ]
 }
@@ -163,4 +171,5 @@ Possíveis Melhorias Futuras
 
 📸 Screenshot
 <img width="533" height="940" alt="image" src="https://github.com/user-attachments/assets/6ff2249f-01df-4001-8204-30b8cbf3d48e" />
+
 
