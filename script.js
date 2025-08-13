@@ -1,62 +1,57 @@
-let arrastando = null;
-let pontuacao = 0;
-let acertos = 0;
-let total = 0;
-let tempo = 0;
-let timerInterval = null;
+class Jogo {
+  constructor(urlJson, ids) {
+    this.urlJson = urlJson;
+    this.total = 0;
+    this.pontuacao = 0;
+    this.acertos = 0;
+    this.tempo = 0;
+    this.timerInterval = null;
 
-// Sons
-const somAcerto = new Audio('assets/songs/happy-message-ping-351298.mp3');
-const somErro = new Audio('assets/songs/error-126627.mp3');
+    // Sons
+    this.somAcerto = new Audio('assets/songs/happy-message-ping-351298.mp3');
+    this.somErro = new Audio('assets/songs/error-126627.mp3');
 
-// Elementos
-const tempoDisplay = document.getElementById('tempo');
-const placarDisplay = document.getElementById('placar');
-const toggleContraste = document.getElementById('toggle-contraste');
+    // Elementos do front
+    this.container1 = document.getElementById(ids.container1);
+    this.container2 = document.getElementById(ids.container2);
+    this.tempoDisplay = document.getElementById(ids.tempo);
+    this.placarDisplay = document.getElementById(ids.placar);
+    this.toggleContraste = document.getElementById(ids.toggleContraste);
 
-// Alto contraste
-if (toggleContraste) {
-  toggleContraste.addEventListener('change', () => {
-    document.body.classList.toggle('high-contrast', toggleContraste.checked);
-  });
-}
+    this.arrastando = null;
 
-
-// Temporizador
-function iniciarTimer() {
-  if (!timerInterval) {
-    timerInterval = setInterval(() => {
-      tempo++;
-      tempoDisplay.textContent = `⏱️${tempo}`;
-    }, 1000);
+    this.inicializar();
   }
-}
 
-function pararTimer() {
-  clearInterval(timerInterval);
-  timerInterval = null;
-}
+  async inicializar() {
+    try {
+      const response = await fetch(this.urlJson);
+      if (!response.ok) throw new Error("Erro ao carregar JSON");
+      this.dados = await response.json();
+      this.total = this.dados.etapas.length;
 
-// Carrega o JSON externo
-fetch('jogo.json')
-  .then(r => r.json())
-  .then(dados => {
-    total = dados.etapas.length;
+      this.carregarCampos();
+      this.carregarRespostas();
+      this.inicializarEventos();
+      this.configurarAltoContraste();
+    } catch (error) {
+      console.error("Falha ao inicializar o jogo:", error);
+    }
+  }
 
-    // Adiciona as descrições como itens arrastáveis
-    const container1 = document.getElementById('container1');
-    dados.etapas.forEach((etapa, i) => {
+  carregarCampos() {
+    this.dados.etapas.forEach((etapa, i) => {
       const div = document.createElement('div');
       div.className = 'campo';
       div.draggable = true;
       div.dataset.id = i;
       div.textContent = etapa.descricao;
-      container1.appendChild(div);
+      this.container1.appendChild(div);
     });
+  }
 
-    // Cria as áreas de respostas com nomes
-    const container2 = document.getElementById('container2');
-    dados.etapas.forEach((etapa, i) => {
+  carregarRespostas() {
+    this.dados.etapas.forEach((etapa, i) => {
       const bloco = document.createElement('div');
       bloco.className = 'valores';
 
@@ -69,88 +64,114 @@ fetch('jogo.json')
 
       bloco.appendChild(dropArea);
       bloco.appendChild(nome);
-      container2.appendChild(bloco);
+      this.container2.appendChild(bloco);
+    });
+  }
+
+  inicializarEventos() {
+    const campos = this.container1.querySelectorAll('.campo');
+    campos.forEach(campo => {
+      campo.addEventListener('dragstart', () => {
+        this.arrastando = campo;
+        campo.classList.add('arrastando');
+        this.iniciarTimer();
+      });
+      campo.addEventListener('dragend', () => {
+        this.arrastando = null;
+        campo.classList.remove('arrastando');
+      });
     });
 
-    inicializarEventos();
-  });
-
-function inicializarEventos() {
-  const campos = document.querySelectorAll('.campo');
-  campos.forEach(campo => {
-    campo.addEventListener('dragstart', () => {
-      arrastando = campo;
-      campo.classList.add('arrastando');
+    const respostas = this.container2.querySelectorAll('.respostas');
+    respostas.forEach(area => {
+      area.addEventListener('dragover', e => e.preventDefault());
+      area.addEventListener('drop', () => this.tratarDrop(area));
     });
-    campo.addEventListener('dragend', () => {
-      arrastando = null;
-      campo.classList.remove('arrastando');
+  }
+
+  configurarAltoContraste() {
+    if (this.toggleContraste) {
+      this.toggleContraste.addEventListener('change', () => {
+        document.body.classList.toggle('high-contrast', this.toggleContraste.checked);
+      });
+    }
+  }
+
+  iniciarTimer() {
+    if (!this.timerInterval) {
+      this.timerInterval = setInterval(() => {
+        this.tempo++;
+        this.tempoDisplay.textContent = `⏱️${this.tempo}`;
+      }, 1000);
+    }
+  }
+
+  pararTimer() {
+    clearInterval(this.timerInterval);
+    this.timerInterval = null;
+  }
+
+  tratarDrop(area) {
+    if (!this.arrastando) return;
+
+    if (this.arrastando.dataset.id === area.dataset.id) {
+      area.appendChild(this.arrastando);
+      this.arrastando.draggable = false;
+      area.parentElement.style.background = 'lightgreen';
+      area.style.background = 'none';
+      area.style.border = 'none';
+
+      this.somAcerto.currentTime = 0;
+      this.somAcerto.play();
+
+      this.pontuacao++;
+      this.acertos++;
+      this.atualizarPlacar();
+
+      if (this.acertos === this.total) this.finalizarJogo();
+    } else {
+      const nomeEvento = area.nextElementSibling.textContent;
+      area.style.background = 'lightcoral';
+      this.somErro.currentTime = 0;
+      this.somErro.play();
+      setTimeout(() => (area.style.background = ''), 500);
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Ops...',
+        text: `Essa descrição não corresponde ao evento de ${nomeEvento}, vamos tentar novamente?`,
+        confirmButtonText: 'Tentar novamente',
+        confirmButtonColor: '#d33',
+      });
+    }
+  }
+
+  atualizarPlacar() {
+    this.placarDisplay.textContent = `💰${this.pontuacao}`;
+  }
+
+  finalizarJogo() {
+    this.pararTimer();
+    Swal.fire({
+      icon: 'success',
+      title: 'Acertou!',
+      html: `Parabéns! Você escolheu corretamente!<br><br>Pontuação final: ${this.pontuacao}/${this.total}<br>Tempo: ${this.tempo}s`,
+      confirmButtonText: 'Voltar à página principal',
+      confirmButtonColor: '#28a745',
+      didOpen: () => confetti({ particleCount: 1500, spread: 700, origin: { y: .5 } }),
+    }).then(result => {
+      if (result.isConfirmed) window.location.href = 'index.html';
     });
-  });
-
-  const respostas = document.querySelectorAll('.respostas');
-  respostas.forEach(area => {
-    area.addEventListener('dragover', e => e.preventDefault());
-
-    area.addEventListener('drop', () => {
-      iniciarTimer();
-
-      if (arrastando && arrastando.dataset.id === area.dataset.id) {
-        area.appendChild(arrastando);
-        arrastando.draggable = false;
-        area.parentElement.style.background = 'lightgreen';
-        area.style.background = 'none';
-        area.style.border = 'none';
-
-        somAcerto.currentTime = 0;
-        somAcerto.play();
-
-        pontuacao++;
-        acertos++;
-        atualizarPlacar();
-
-        if (acertos === total) {
-          pararTimer();
-          Swal.fire({
-            icon: 'success',
-            title: 'Acertou!',
-            html: `Parabéns! Você escolheu corretamente!<br><br>Pontuação final: ${pontuacao}/${total}<br>Tempo: ${tempo}s`,
-            confirmButtonText: 'Voltar à página principal',
-            confirmButtonColor: '#28a745',
-             didOpen: () => {
-            confetti({
-            particleCount: 1500,
-             spread: 700,
-             origin: { y: .5}
-             });}
-            
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // Redireciona para a página inicial (ajuste a URL conforme seu projeto)
-              window.location.href = 'index.html';
-            }
-          });
-        }
-      } else {
-        const nomeEvento = area.nextElementSibling.textContent;
-        area.style.background = 'lightcoral';
-        somErro.currentTime = 0;
-        somErro.play();
-        setTimeout(() => (area.style.background = ''), 500);
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Ops...',
-          text: `Essa descrição não corresponde ao evento de ${nomeEvento}, vamos tentar novamente?`,
-          confirmButtonText: 'Tentar novamente',
-          confirmButtonColor: '#d33',
-         
-        });
-      }
-    });
-  });
+  }
 }
 
-function atualizarPlacar() {
-  placarDisplay.textContent = `💰${pontuacao}`;
-}
+// Inicialização após o DOM carregar
+document.addEventListener('DOMContentLoaded', () => {
+  new Jogo('jogo.json', {
+    container1: 'container1',
+    container2: 'container2',
+    tempo: 'tempo',
+    placar: 'placar',
+    toggleContraste: 'toggle-contraste'
+  });
+});

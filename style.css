@@ -68,6 +68,10 @@
   /* background-color: yellow !important; */
   color: rgb(0, 0, 0) !important;
 }
+.high-contrast #titulo {
+  /* background-color: yellow !important; */
+  color: yellow !important;
+}
 .high-contrast .content {
   background-color: yellow !important;
   color: black !important;
