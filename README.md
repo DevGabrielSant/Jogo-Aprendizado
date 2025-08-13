@@ -142,7 +142,7 @@ Como Executar:
 
 Clone o repositório:
 
-git clone https://github.com/seu-usuario/projeto-jogo.git
+git clone https://github.com/DevGabrielSant/Jogo-Aprendizado.git
 
 -Abra index.html no navegador.
 
@@ -171,5 +171,6 @@ Possíveis Melhorias Futuras
 
 📸 Screenshot
 <img width="533" height="940" alt="image" src="https://github.com/user-attachments/assets/6ff2249f-01df-4001-8204-30b8cbf3d48e" />
+
 
 
