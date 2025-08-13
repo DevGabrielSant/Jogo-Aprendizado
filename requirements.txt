@@ -1,0 +1,37 @@
+requirements.txt
+
+div estadosAgua
+    div tipoEstado class estados
+
+
+criar classe no css para que as divs dos estados estejam padronizadas
+
+realcionar o nome com o
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+○ Quatro alvos fixos com os nomes das etapas:
+■ Evaporação
+■ Condensação
+■ Precipitação
+■ Infiltração
+○ Quatro blocos arrastáveis com as descrições (veja o conteúdo abaixo)
+○ Sistema de drag-and-drop
+○ Validação:
+■ Se correto: marcar como certo (ex: fundo verde, bloquear movimento)
+■ Se incorreto: voltar para a posição original e mostrar feedback

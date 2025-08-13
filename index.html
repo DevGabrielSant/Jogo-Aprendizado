@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drag and Drop Ciclo da Água</title>
+<body>
+<style>
+  .container {
+    width: 80%;
+    min-height: 150px;
+    padding: 10px;
+    margin: 10px;
+    border: 2px solid #333;
+    background: #f8f8f8;
+    display: inline-block;
+    vertical-align: top;
+    border-radius: 15px;
+  }
+  .valores {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(211, 139, 139);
+    height: 100px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+  .campo {
+    padding: 10px;
+    margin: 5px 0;
+    background: lightblue;
+    border: 1px solid #333;
+    cursor: grab;
+    user-select: none;
+    border-radius: 10px;
+
+  }
+  .campo.arrastando {
+    opacity: 0.5;
+    
+  }
+  .respostas {
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    background-color: rgb(201, 43, 43);
+    height: 75%;
+    width: 70%;
+    border: 1px dashed #000;
+    border-radius: 10px;
+
+  }
+
+  /* Alto contraste */
+.high-contrast {
+  background-color: black;
+  color: white;
+}
+
+.high-contrast .valores {
+  background-color: black !important;
+  color: yellow !important;
+}
+
+.high-contrast .campo {
+  background-color: yellow !important;
+  color: black !important;
+}
+
+#painel {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.jogo{
+  /* visibility: hidden; */
+  background-color: rgb(145, 138, 138);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  margin: auto;
+  border-radius: 15px;
+}
+
+
+
+</style>
+<div class="jogo" id="jogo">
+  <div id="painel">
+    <label>
+      <input type="checkbox" id="toggle-contraste"> Alto Contraste
+    </label>
+    | Tempo: <span id="tempo">0</span>s
+    | Pontos: <span id="placar">0</span>
+  </div>
+
+  <div id="container1" class="container"></div>
+
+  <div id="container2" class="container"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+let arrastando = null;
+let pontuacao = 0;
+let acertos = 0;
+let total = 0;
+let tempo = 0;
+let timerInterval = null;
+
+
+// Som
+const somAcerto = new Audio('assets/songs/happy-message-ping-351298.mp3');
+const somErro = new Audio('assets/songs/error-126627.mp3');
+
+// Elementos
+const tempoDisplay = document.getElementById('tempo');
+const placarDisplay = document.getElementById('placar');
+const toggleContraste = document.getElementById('toggle-contraste');
+
+// Alto contraste
+if (toggleContraste) {
+  toggleContraste.addEventListener('change', () => {
+    document.body.classList.toggle('high-contrast', toggleContraste.checked);
+  });
+}
+
+// Temporizador
+function iniciarTimer() {
+  if (!timerInterval) {
+    timerInterval = setInterval(() => {
+      tempo++;
+      tempoDisplay.textContent = tempo;
+    }, 1000);
+  }
+}
+
+function pararTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+}
+
+// Carrega o JSON externo
+fetch('jogo.json')
+  .then(r => r.json())
+  .then(dados => {
+    total = dados.etapas.length;
+
+    // Adiciona as descrições como itens arrastáveis
+    const container1 = document.getElementById('container1');
+    dados.etapas.forEach((etapa, i) => {
+      const div = document.createElement('div');
+      div.className = 'campo';
+      div.draggable = true;
+      div.dataset.id = i;
+      div.textContent = etapa.descricao;
+      container1.appendChild(div);
+    });
+
+    // Cria as áreas de respostas com nomes
+    const container2 = document.getElementById('container2');
+    dados.etapas.forEach((etapa, i) => {
+      const bloco = document.createElement('div');
+      bloco.className = 'valores';
+
+      const dropArea = document.createElement('div');
+      dropArea.className = 'respostas';
+      dropArea.dataset.id = i;
+
+      const nome = document.createElement('div');
+      nome.textContent = etapa.nome;
+
+      bloco.appendChild(dropArea);
+      bloco.appendChild(nome);
+      container2.appendChild(bloco);
+    });
+
+    inicializarEventos();
+  });
+
+function inicializarEventos() {
+  const campos = document.querySelectorAll('.campo');
+  campos.forEach(campo => {
+    campo.addEventListener('dragstart', () => {
+      arrastando = campo;
+      campo.classList.add('arrastando');
+    });
+    campo.addEventListener('dragend', () => {
+      arrastando = null;
+      campo.classList.remove('arrastando');
+    });
+  });
+
+  const respostas = document.querySelectorAll('.respostas');
+  respostas.forEach(area => {
+    area.addEventListener('dragover', e => e.preventDefault());
+
+    area.addEventListener('drop', () => {
+      iniciarTimer();
+
+      if (arrastando && arrastando.dataset.id === area.dataset.id) {
+        area.appendChild(arrastando);
+        arrastando.draggable = false;
+        area.parentElement.style.background = 'lightgreen';
+        area.style.background='none';
+        area.style.border='none';
+
+        somAcerto.currentTime = 0;
+        somAcerto.play();
+
+        pontuacao++;
+        acertos++;
+        atualizarPlacar();
+
+        if (acertos === total) {
+          pararTimer();
+          setTimeout(() => {}, 300);
+          Swal.fire({
+          icon: 'success',
+          title: 'Acertou!',
+          html: `Parabéns! Você escolheu corretamente!<br><br>Pontuação final: ${pontuacao}/${total}\n Tempo: ${tempo}s`,
+          confirmButtonColor: '#28a745',
+          timer: 15000,
+          confirmButtonText: 'Voltar a página principal',
+          confirmButtonColor: '#d33',
+});
+        }
+      } else {
+
+        const nomeEvento=area.nextElementSibling.textContent;
+        area.style.background = 'lightcoral';
+        somErro.currentTime = 0;
+        somErro.play();
+        setTimeout(() => area.style.background = '', 500);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Ops...',
+          text: `Essa descrição não corresponde ao evento de ${nomeEvento}, vamos tentar novamente?`,
+          confirmButtonText: 'Tentar novamente',
+          confirmButtonColor: '#d33',
+        });
+      }
+    });
+  });
+}
+
+function atualizarPlacar() {
+  placarDisplay.textContent = pontuacao;
+}
+
+</script>
+</body>
